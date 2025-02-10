@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Ready Go Trainer</title>
+</head>
+<body>
+
+    <div class="header-text">
+    <h2>Ready Go Trainer</h2>
+    <h5>By Armwrestling Academia</h5>
+</div>
+
+<div>
+    <form>
+        <label for="rounds">Number of Rounds:</label>
+        <select name="rounds" id="rounds">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          
+        </select>
+
+        <label for="interval-style">Time Type:</label>
+        <select name="interval-style" id="interval-style">
+            <option value="fixed">Fixed</option>
+            <option value="random">Random</option>
+        </select>
+
+        <label for="fixed-time">Fixed Countdown Time: </label>
+        <select name="fixed-time" id="fixed-time">
+            <option value="3">3 Seconds</option>
+            <option value="4">4 Seconds</option>
+            <option value="5">5 Seconds</option>
+            <option value="6">6 Seconds</option>
+            <option value="7">7 Seconds</option>
+            <option value="8">8 Seconds</option>
+            <option value="9">9 Seconds</option>
+            <option value="10">10 Seconds</option>
+        </select>
+
+        <label for="random-time-max">Maximum Random Time: </label>
+        <select name="random-time-max" id="random-time-max">
+            <option value="4">4 Seconds</option>
+            <option value="5">5 Seconds</option>
+            <option value="6">6 Seconds</option>
+            <option value="7">7 Seconds</option>
+            <option value="8">8 Seconds</option>
+            <option value="9">9 Seconds</option>
+            <option value="10">10 Seconds</option>
+
+        </select>
+
+   
+    </form>
+</div>
+
+    <div>
+        <button class="start-button" id="start-button">START</button>
+    </div>
+
+    <div class="countdown-timer" id="countdown-timer">
+        <h1 class="countdown-timer-display" id="countdown-timer-display">0</h1>
+        
+    </div>
+
+    <div class="input-output" id="input-output">
+        <h5 id="rounds-output">Rounds: 0</h5>
+        <h5  id="interval-style-output">Interval Type: Fixed</h5>
+        <h5 id="countdown-time-output">Countdown: 3 Seconds</h5>
+    </div>
+
+</body>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const roundSelection = document.getElementById("rounds");
+        const roundsOutput = document.getElementById("rounds-output");
+        let numberOfRounds = 1;
+        let chosenNumberOfRounds = numberOfRounds;
+
+        const intervalTypeSelection = document.getElementById("interval-style");
+        let selectedIntervalType = "Random"
+        let capitalizedSelectedIntervalType =  selectedIntervalType.charAt(0).toUpperCase() + selectedIntervalType.slice(1);
+        const intervalTypeOutput = document.getElementById("interval-style-output");
+
+        const fixedTimeSelection = document.getElementById("fixed-time");
+        const timeOutput = document.getElementById("countdown-time-output");
+
+        const randomTimeSelection = document.getElementById("random-time-max");
+
+        const startButton = document.getElementById("start-button");
+        const countdownTimer = document.getElementById("countdown-timer-display");
+
+        let countdownTime = "3";
+        let chosenCountdownTime = countdownTime;
+
+        AddEventListeners();
+
+        function AddEventListeners()
+        {
+            roundSelection.addEventListener('change', (e) => {
+                roundsOutput.textContent = "Rounds Remaining: " + e.target.value;
+                numberOfRounds = parseInt(e.target.value);
+                chosenNumberOfRounds = numberOfRounds;
+            });
+
+            intervalTypeSelection.addEventListener('change', (e) => {
+                selectedIntervalType = e.target.value;
+                capitalizedSelectedIntervalType =  selectedIntervalType.charAt(0).toUpperCase() + selectedIntervalType.slice(1);
+                intervalTypeOutput.textContent = "Interval Type: " + capitalizedSelectedIntervalType;
+            });
+
+            fixedTimeSelection.addEventListener('change', (e) => {
+                timeOutput.textContent = "Countdown: " + e.target.value + " Seconds"
+                countdownTime = parseInt(e.target.value);
+                chosenCountdownTime = countdownTime;
+            })
+
+            randomTimeSelection.addEventListener('change', (e) => {
+                timeOutput.textContent = "Countdown: Up To " + e.target.value + " Seconds"
+                countdownTime = parseInt(e.target.value);
+                chosenCountdownTime = countdownTime;
+            })
+
+            startButton.addEventListener("click", (e) => {              
+                Countdown();         
+            })
+        }
+
+        function Countdown()
+        {
+
+            numberOfRounds --;
+            roundsOutput.textContent = "Rounds Remaining: " + numberOfRounds;
+
+                    countdownTimer.textContent = countdownTime;
+
+                    const countdown = setInterval(() => {
+
+                        countdownTime--;
+
+                        countdownTimer.textContent = countdownTime;
+
+                        if(countdownTime <= 0) {
+                            clearInterval(countdown); // stop the timer
+                            countdownTime = chosenCountdownTime;
+                            
+                            countdownTimer.textContent = "GO!";
+
+                            if (numberOfRounds > 0)
+                            {
+                                
+                                setTimeout(() => {
+                                    Countdown();
+                                }, 2000);
+                            }
+                            else
+                            {
+                                numberOfRounds = chosenCountdownTime;
+                            }
+                        }
+                    }, 1000);
+        }
+
+        
+
+    })
+
+    
+
+    </script>
+</html>
