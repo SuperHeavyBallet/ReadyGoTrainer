@@ -14,7 +14,7 @@
 </div>
 
 <div>
-    <form>
+    <form class="user-input">
         <label for="rounds">Number of Rounds:</label>
         <select name="rounds" id="rounds">
             <option value="1">1</option>
@@ -29,6 +29,8 @@
             <option value="10">10</option>
           
         </select>
+
+       
 
         <label for="interval-style">Time Type:</label>
         <select name="interval-style" id="interval-style">
@@ -60,6 +62,18 @@
 
         </select>
 
+        <label for="setup-time">Setup Time:</label>
+        <select name="setup-time" id="setup-time">
+            <option value="3">3 Seconds</option>
+            <option value="4">4 Seconds</option>
+            <option value="5">5 Seconds</option>
+            <option value="6">6 Seconds</option>
+            <option value="7">7 Seconds</option>
+            <option value="8">8 Seconds</option>
+            <option value="9">9 Seconds</option>
+            <option value="10">10 Seconds</option>
+        </select>
+
    
     </form>
 </div>
@@ -74,8 +88,9 @@
     </div>
 
     <div class="input-output" id="input-output">
-        <h5 id="rounds-output">Rounds: 0</h5>
+        <h5 id="rounds-output">Rounds Remaining: 1</h5>
         <h5  id="interval-style-output">Interval Type: Fixed</h5>
+        <h5 id="setup-time-output">Setup Time: 4 Seconds</h5>
         <h5 id="countdown-time-output">Countdown: 3 Seconds</h5>
     </div>
 
@@ -89,6 +104,12 @@
         const roundsOutput = document.getElementById("rounds-output");
         let numberOfRounds = 1;
         let chosenNumberOfRounds = numberOfRounds;
+
+        const setupTimeSelection = document.getElementById("setup-time");
+        const setupTimeOutput = document.getElementById("setup-time-output");
+        let setupTime = 4;
+        let chosenSetupTime = setupTime;
+        
 
         const intervalTypeSelection = document.getElementById("interval-style");
         let selectedIntervalType = "Random"
@@ -116,6 +137,12 @@
                 chosenNumberOfRounds = numberOfRounds;
             });
 
+            setupTimeSelection.addEventListener('change', (e) => {
+                setupTimeOutput.textContent = "Setup Time: " + e.target.value + " Seconds";
+                setupTime = parseInt(e.target.value);
+                chosenSetupTime = setupTime;
+            })
+
             intervalTypeSelection.addEventListener('change', (e) => {
                 selectedIntervalType = e.target.value;
                 capitalizedSelectedIntervalType =  selectedIntervalType.charAt(0).toUpperCase() + selectedIntervalType.slice(1);
@@ -123,7 +150,7 @@
             });
 
             fixedTimeSelection.addEventListener('change', (e) => {
-                timeOutput.textContent = "Countdown: " + e.target.value + " Seconds"
+                timeOutput.textContent = "Countdown: " + e.target.value + " Seconds";
                 countdownTime = parseInt(e.target.value);
                 chosenCountdownTime = countdownTime;
             })
@@ -134,14 +161,24 @@
                 chosenCountdownTime = countdownTime;
             })
 
-            startButton.addEventListener("click", (e) => {              
-                Countdown();         
+            startButton.addEventListener("click", (e) => {   
+                           console.log("Setup: " + setupTime);
+                PreCountdownBuffer();       
             })
+        }
+
+        function PreCountdownBuffer()
+        {
+            countdownTimer.textContent = "...";
+            const buffer = setTimeout(Countdown, setupTime * 1000);
+            startButton.classList.add("orange");
+            startButton.textContent = "WAIT";
         }
 
         function Countdown()
         {
-
+            startButton.classList.remove("orange");
+            startButton.classList.add("red");
             numberOfRounds --;
             roundsOutput.textContent = "Rounds Remaining: " + numberOfRounds;
 
@@ -158,17 +195,23 @@
                             countdownTime = chosenCountdownTime;
                             
                             countdownTimer.textContent = "GO!";
+                            startButton.textContent = "GO!";
 
                             if (numberOfRounds > 0)
                             {
                                 
                                 setTimeout(() => {
-                                    Countdown();
+                                    //Countdown();
+
+                                    PreCountdownBuffer();
+
                                 }, 2000);
                             }
                             else
                             {
                                 numberOfRounds = chosenCountdownTime;
+                                startButton.classList.remove("red");
+                                startButton.textContent = "START";
                             }
                         }
                     }, 1000);
