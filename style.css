@@ -54,37 +54,83 @@ html{
     font-family: 'Courier New', Courier, monospace;
 }
 body{
+    background-color: grey;
+}
+.interface-container{
     width: 100vw;
+    height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    
+    
+    
+}
+
+.interact-area{
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .header-text{
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border: 1px solid black;
-    background-color: black ;
+    background-color: black;
     color: white;
-    padding: 0.5rem;
-    margin: 0.5rem;
+    padding: 0.5rem 0;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    overflow: hidden;
 }
 
+.header-text h2{
+
+    margin-top: 0.25rem;
+}
 .header-text h5{
     font-size: small;
+    
     margin-top: 0.25rem;
 }
 
 .user-input{
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    padding: 0.5rem;
+    
+    
+    
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 1rem;
     margin: 0.5rem;
+ 
+    
+
 }
+
+.user-input label{
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.user-input select{
+    padding: 0.25rem;
+}
+
 
 .countdown-timer
 {
@@ -94,15 +140,24 @@ body{
 .countdown-timer h1{
     padding: 1rem;
     font-size: x-large;
-    color: white;
+    
 }
+
+
 
 .start-button{
     padding: 2rem;
-    background-color: greenyellow;
-    border: 1px solid black;
+    display: flex;
+    
+
+    height: 6vh;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
     border-radius: 0.5rem;
     margin: 0.5rem;
+    color: white;
 }
 
 .start-button:hover{
@@ -110,15 +165,30 @@ body{
     cursor: pointer;
 }
 
+.hidden{
+    display: none;
+}
+
 .orange{
     background-color: orange;
+    color: black;
 }
 .red{
     background-color: red;
+    color: white;
+}
+.green
+{
+    background-color: greenyellow;
+    color: black;
 }
 
 .input-output{
-    border: 1px solid black;
-    padding: 0.5rem;
+    
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    padding: 1rem;
     margin: 0.5rem;
+    background-color: white;
+    border-radius: 5px;
+
 }
