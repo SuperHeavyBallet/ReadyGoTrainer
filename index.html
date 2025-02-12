@@ -206,7 +206,7 @@
 
             startTypeSelection.addEventListener('change', (e) => {
                 startTypeOutput.textContent = "Start Type: " + e.target.value;
-                startType  = toString(e.target.value);
+                startType  = e.target.value;
                 chosenStartType = startType;
             })
 
@@ -316,6 +316,8 @@
                     clearInterval(countdown); // stop the timer
                     countdownTime = chosenCountdownTime;
                             
+                    console.log(startType);
+
                     if(startType === "fast")
                     {
                         playSound(ready_go_fast_AudioObjects);
