@@ -105,6 +105,27 @@ document.addEventListener("DOMContentLoaded", () => {
     let countdownInterval = null;
     let preCountdownTimeout = null;
 
+    let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock is active.');
+
+                    // Re-apply lock if it’s released
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock was released');
+                    });
+                }
+                else {
+                    console.warn("Wake Lock API not supported. Your device may sleep during operation.");
+                }
+            } catch (err) {
+                console.error(`Failed to activate Wake Lock: ${err.message}`);
+            }
+        }
+
     AddEventListeners();
 
     function AddEventListeners()
@@ -167,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if(isInLoopAlready === false)
             {
                 isInLoopAlready = true;
+                requestWakeLock();
                 PreCountdownBuffer();   
             }
                 
@@ -179,6 +201,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function ResetAll()
     {
+        if (wakeLock !== null) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+
         if (countdownInterval) {
             clearInterval(countdownInterval);
             countdownInterval = null;
@@ -237,6 +264,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     roundsOutput.textContent = "Rounds Remaining: " + numberOfRounds;
                     startButton.textContent = "START";
     }
+
+  
 
     function Countdown(finalCountdownTime)
     {
