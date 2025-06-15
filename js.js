@@ -1,29 +1,53 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const ready_go_sounds_slow = [
-    'assets/audio/ready-go/Ready_Go_00.mp3',
-    'assets/audio/ready-go/Ready_Go_01.mp3',
-    'assets/audio/ready-go/Ready_Go_02.mp3',
-    'assets/audio/ready-go/Ready_Go_03.mp3'
+    'assets/audio/slow-ready-go/slow_readygo_00.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_01.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_02.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_03.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_04.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_05.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_06.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_07.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_08.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_09.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_10.mp3',
+    'assets/audio/slow-ready-go/slow_readygo_11.mp3',
+
     ];
 
     const ready_go_slow_AudioObjects = ready_go_sounds_slow.map(src => new Audio(src));
 
     const ready_go_sounds_fast = [
-    'assets/audio/readygo/Go_00.mp3',
-    'assets/audio/readygo/Go_01.mp3',
-    'assets/audio/readygo/Go_02.mp3',
-    'assets/audio/readygo/Go_03.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_00.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_01.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_02.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_03.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_04.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_05.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_06.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_07.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_08.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_09.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_10.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_11.mp3',
+        'assets/audio/fast-ready-go/Ready_Go_12.mp3'
 
     ];
 
     const ready_go_fast_AudioObjects = ready_go_sounds_fast.map(src => new Audio(src));
 
     const ready_go_sounds_go = [
-    'assets/audio/readygo/Go_00.mp3',
-    'assets/audio/readygo/Go_01.mp3',
-    'assets/audio/readygo/Go_02.mp3',
-    'assets/audio/readygo/Go_03.mp3',
+    'assets/audio/solo-readygo/Go_00.mp3',
+    'assets/audio/solo-readygo/Go_01.mp3',
+    'assets/audio/solo-readygo/Go_02.mp3',
+    'assets/audio/solo-readygo/Go_03.mp3',
+    'assets/audio/solo-readygo/Go_04.mp3',
+    'assets/audio/solo-readygo/Go_05.mp3',
+    'assets/audio/solo-readygo/Go_06.mp3',
+    'assets/audio/solo-readygo/Go_07.mp3',
+    'assets/audio/solo-readygo/Go_08.mp3',
+    'assets/audio/solo-readygo/Go_09.mp3'
     ];
 
     const ready_go_go_AudioObjects = ready_go_sounds_go.map(src => new Audio(src));
@@ -72,10 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const startButton = document.getElementById("start-button");
     const countdownTimer = document.getElementById("countdown-timer-display");
 
+    const resetButton = document.getElementById("reset-button");
+
     let countdownTime = "3";
     let chosenCountdownTime = countdownTime;
 
     let isInLoopAlready = false;
+    let countdownInterval = null;
+    let preCountdownTimeout = null;
 
     AddEventListeners();
 
@@ -142,30 +170,63 @@ document.addEventListener("DOMContentLoaded", () => {
                 PreCountdownBuffer();   
             }
                 
+        });
+
+        resetButton.addEventListener("click", (e) => {
+            ResetAll();
         })
+    }
+
+    function ResetAll()
+    {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+
+        if(preCountdownTimeout) {
+            clearTimeout(preCountdownTimeout);
+            preCountdownTimeout = null;
+        }
+
+        numberOfRounds = chosenNumberOfRounds;
+        countdownTime = chosenCountdownTime;
+        setupTime = chosenSetupTime;
+        startType = chosenStartType;
+
+        countdownTimer.textContent = "--";
+        roundsOutput.textContent = "Rounds Remaining: " + numberOfRounds;
+
+        startButton.classList.remove("red", "green", "orange");
+        startButton.classList.add("green");
+        startButton.textContent = "START";
+
+        isInLoopAlready = false;
     }
 
     function PreCountdownBuffer()
     {
         countdownTimer.textContent = "...";
 
+        const delay = setupTime * 1000;
+
         if (selectedIntervalType === "random")
         {
-            console.log("Random path");
+
             randomCountdownTime = Math.floor((Math.random() * countdownTime)) + 1;
-            console.log(randomCountdownTime);
-            const buffer = setTimeout(Countdown(randomCountdownTime), setupTime * 1000);
+
+            preCountdownTimeout = setTimeout(() => Countdown(randomCountdownTime), delay);
+            //const buffer = setTimeout(Countdown(randomCountdownTime), setupTime * 1000);
         }
         else{
-            console.log("Fixed path");
-            console.log(countdownTime);
-            const buffer = setTimeout(Countdown(countdownTime), setupTime * 1000);
+            preCountdownTimeout = setTimeout(() => Countdown(countdownTime), delay);
+            //const buffer = setTimeout(Countdown(countdownTime), setupTime * 1000);
         }
 
         
         startButton.classList.remove("green");
         startButton.classList.add("orange");
-        startButton.textContent = "WAIT";
+        startButton.textContent = "SETUP";
     }
 
     function LastRoundCooldownBuffer()
@@ -181,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
         startButton.classList.remove("orange");
         startButton.classList.add("red");
+        startButton.textContent = "WAIT";
         numberOfRounds --;
         roundsOutput.textContent = "Rounds Remaining: " + (parseInt(numberOfRounds + 1));
 
@@ -189,17 +251,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
        
 
-        const countdown = setInterval(() => {
+        countdownInterval = setInterval(() => {
 
             finalCountdownTime--;
             countdownTimer.textContent = finalCountdownTime;
 
             if(finalCountdownTime <= 0) {
 
-                clearInterval(countdown); // stop the timer
+                clearInterval(countdownInterval); // stop the timer
+                countdownInterval = null;
                 countdownTime = chosenCountdownTime;
                         
-                console.log(startType);
+       
 
                 if(startType === "fast")
                 {
@@ -219,15 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (numberOfRounds > 0)
                 {
                             
-                    setTimeout(() => {
-                        PreCountdownBuffer();
-                    }, 3000);
+                    preCountdownTimeout = setTimeout(() => PreCountdownBuffer(), 3000);
                 }
                 else
                 {
-                    setTimeout(() => {
-                        LastRoundCooldownBuffer();
-                    }, 3000);
+                    preCountdownTimeout = setTimeout(() => LastRoundCooldownBuffer(), 3000);
                    
                    
                 }
